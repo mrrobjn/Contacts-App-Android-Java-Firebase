@@ -92,17 +92,17 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-                            FirebaseUser user = firebase.auth.getCurrentUser();
-                            Users users = new Users();
-                            users.setUserId(user.getUid());
-                            users.setName(user.getDisplayName());
-                            users.setProfile(user.getPhotoUrl().toString());
-
-                            String userId = users.getUserId();
-                            String name = users.getName();
-                            String photoUrl = users.getProfile();
-
-                            users.createUser(userId,name,photoUrl);
+//                            FirebaseUser user = firebase.auth.getCurrentUser();
+//                            Users users = new Users();
+//                            users.setUserId(user.getUid());
+//                            users.setName(user.getDisplayName());
+//                            users.setProfile(user.getPhotoUrl().toString());
+//
+//                            String userId = users.getUserId();
+//                            String name = users.getName();
+//                            String photoUrl = users.getProfile();
+//
+//                            users.createUser(userId,name,photoUrl);
 
                             Intent intent = new Intent(LoginActivity.this, MainActivity2.class);
                             startActivity(intent);
