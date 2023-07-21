@@ -6,6 +6,7 @@ public class Contacts {
     private String name;
     private String phoneNumber;
 
+    private String imgUrl;
     public Contacts() {}
 
     public Contacts(String name, String phoneNumber) {
@@ -21,12 +22,20 @@ public class Contacts {
         this.name = name;
     }
 
-    public String getPhone() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhone(String phone) {
-        this.phoneNumber = phone;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 }
 

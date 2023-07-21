@@ -2,13 +2,10 @@ package com.example.votruongdung_4842;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -19,9 +16,12 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
-public class MainActivity2 extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity {
     TextView tvname;
     ImageView imgv;
     private ListView contactsListView;
@@ -36,7 +36,7 @@ public class MainActivity2 extends AppCompatActivity {
         String name = fb.currentUser.getDisplayName();
         String url = fb.currentUser.getPhotoUrl().toString();
 
-        tvname = findViewById(R.id.textView4);
+        tvname = findViewById(R.id.user_name);
         imgv = findViewById(R.id.imageView);
 
         tvname.setText(name);
@@ -50,6 +50,7 @@ public class MainActivity2 extends AppCompatActivity {
         contactsListView.setAdapter(contactsAdapter);
 
         fb.db.collection("contacts")
+                .whereEqualTo("userId", fb.currentUser.getUid())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -57,9 +58,21 @@ public class MainActivity2 extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             List<Contacts> contactsList = new ArrayList<>();
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Contacts contact = document.toObject(Contacts.class);
-                                contactsList.add(contact);
+                                List<Map<String, Object>> list = (List<Map<String, Object>>) document.get("list");
+                                for (Map<String, Object> map : list) {
+                                    Contacts contacts = new Contacts();
+                                    contacts.setName((String) map.get("name"));
+
+                                    // Set other fields as needed
+                                    contactsList.add(contacts);
+                                }
                             }
+                            Collections.sort(contactsList, new Comparator<Contacts>() {
+                                @Override
+                                public int compare(Contacts c1, Contacts c2) {
+                                    return c1.getName().compareTo(c2.getName());
+                                }
+                            });
                             contactsAdapter.updateData(contactsList);
                         } else {
                             Log.w("MainActivity2", "Error getting documents.", task.getException());
