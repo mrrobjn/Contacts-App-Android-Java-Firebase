@@ -3,14 +3,17 @@ package com.example.votruongdung_4842;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.votruongdung_4842.adapters.ContactsAdapter;
+import com.example.votruongdung_4842.data.ContactDetail;
 import com.example.votruongdung_4842.data.Contacts;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -67,6 +70,8 @@ public class HomeActivity extends AppCompatActivity {
                                     Contacts contacts = new Contacts();
                                     contacts.setName((String) map.get("name"));
                                     contacts.setPhoneNumber((String) map.get("phone"));
+                                    contacts.setContactId((String) map.get("contactId"));
+
                                     // Set other fields as needed
                                     String firstLetter = contacts.getName().substring(0, 1).toUpperCase();
                                     if (!contactsMap.containsKey(firstLetter)) {
@@ -95,7 +100,17 @@ public class HomeActivity extends AppCompatActivity {
                         }
                     }
                 });
+        contactsListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long l) {
+                Contacts contact = (Contacts) contactsAdapter.getChild(groupPosition, childPosition);
 
+                Intent intent = new Intent(HomeActivity.this, ContactDetailActivity.class);
+                intent.putExtra("contactId", contact.getContactId());
+                startActivity(intent);
+                return true;
+            }
+        });
     }}
 
 
