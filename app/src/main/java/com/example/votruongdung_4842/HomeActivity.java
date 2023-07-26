@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,6 +31,7 @@ import java.util.Map;
 public class HomeActivity extends AppCompatActivity {
     TextView tvname;
     ImageView imgv;
+    Button addBtn;
     private ExpandableListView contactsListView;
     private ContactsAdapter contactsAdapter;
 
@@ -44,6 +46,8 @@ public class HomeActivity extends AppCompatActivity {
 
         tvname = findViewById(R.id.user_name);
         imgv = findViewById(R.id.imageView);
+        contactsListView = findViewById(R.id.contacts_list);
+        addBtn = findViewById(R.id.add_contact_btn);
 
         tvname.setText(name);
 
@@ -51,7 +55,6 @@ public class HomeActivity extends AppCompatActivity {
                 .load(url)
                 .into(imgv);
 
-        contactsListView = findViewById(R.id.contacts_list);
         Map<String, List<Contacts>> contactsMap = new HashMap<>();
         contactsAdapter = new ContactsAdapter(this, contactsMap);
         contactsListView.setAdapter(contactsAdapter);
@@ -109,6 +112,14 @@ public class HomeActivity extends AppCompatActivity {
                 intent.putExtra("contactId", contact.getContactId());
                 startActivity(intent);
                 return true;
+            }
+        });
+
+        addBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent t = new Intent(HomeActivity.this, AddContactActivity.class);
+                startActivity(t);
             }
         });
     }}
