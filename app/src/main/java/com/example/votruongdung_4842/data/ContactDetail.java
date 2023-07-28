@@ -3,7 +3,7 @@ package com.example.votruongdung_4842.data;
 import java.util.Date;
 
 public class ContactDetail {
-    private String id,name,phone,email;
+    private String id,name,phone,email,imgUrl;
     Date dateCreated;
 
     public String getName() {
@@ -36,5 +36,13 @@ public class ContactDetail {
 
     public void setDateCreated(Date dateCreated) {
         this.dateCreated = dateCreated;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 }

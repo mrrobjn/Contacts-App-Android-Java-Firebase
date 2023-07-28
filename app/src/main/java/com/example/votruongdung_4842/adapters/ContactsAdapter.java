@@ -6,8 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.votruongdung_4842.R;
 import com.example.votruongdung_4842.data.Contacts;
 
@@ -83,12 +85,18 @@ public class ContactsAdapter extends BaseExpandableListAdapter {
         }
         TextView nameTextView = convertView.findViewById(R.id.contact_name);
         TextView phoneTextView = convertView.findViewById(R.id.contact_phone);
+        ImageView photo = convertView.findViewById(R.id.imageView2);
+
 
         Contacts contacts = (Contacts) getChild(groupPosition, childPosition);
 
         if (contacts != null) {
             nameTextView.setText(contacts.getName());
             phoneTextView.setText("+84 " + removeFirstZero(contacts.getPhoneNumber()));
+            Glide.with(convertView)
+                    .load(contacts.getImgUrl())
+                    .circleCrop()
+                    .into(photo);
         }
         return convertView;
     }

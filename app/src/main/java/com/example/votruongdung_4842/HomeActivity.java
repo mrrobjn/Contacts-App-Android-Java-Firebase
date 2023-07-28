@@ -2,7 +2,10 @@ package com.example.votruongdung_4842;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,6 +30,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import android.Manifest;
 
 public class HomeActivity extends AppCompatActivity {
     TextView tvname;
@@ -74,6 +78,7 @@ public class HomeActivity extends AppCompatActivity {
                                     contacts.setName((String) map.get("name"));
                                     contacts.setPhoneNumber((String) map.get("phone"));
                                     contacts.setContactId((String) map.get("contactId"));
+                                    contacts.setImgUrl((String) map.get("photo"));
 
                                     // Set other fields as needed
                                     String firstLetter = contacts.getName().substring(0, 1).toUpperCase();
@@ -122,6 +127,7 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(t);
             }
         });
-    }}
+    }
+}
 
 

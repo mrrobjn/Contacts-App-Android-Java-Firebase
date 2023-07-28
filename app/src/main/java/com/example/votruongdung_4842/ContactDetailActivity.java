@@ -7,12 +7,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.votruongdung_4842.data.ContactDetail;
 import com.example.votruongdung_4842.data.Contacts;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -33,6 +35,7 @@ public class ContactDetailActivity extends AppCompatActivity {
     ContactDetail contactDetail = new ContactDetail();
     TextView name, phone, email;
     ImageButton returnBtn , callBtn, messageBtn, emailBtn;
+    ImageView avatar;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +52,9 @@ public class ContactDetailActivity extends AppCompatActivity {
         callBtn = findViewById(R.id.call_btn);
         messageBtn = findViewById(R.id.message_btn);
         emailBtn = findViewById(R.id.email_btn);
+
+        avatar = findViewById(R.id.imageView4);
+
         returnBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,9 +105,16 @@ public class ContactDetailActivity extends AppCompatActivity {
                                         contactDetail.setName((String) map.get("name"));
                                         contactDetail.setPhone((String) map.get("phone"));
                                         contactDetail.setEmail((String) map.get("email"));
+                                        contactDetail.setImgUrl((String) map.get("photo"));
+
                                         name.setText(contactDetail.getName());
                                         phone.setText(contactDetail.getPhone());
                                         email.setText(contactDetail.getEmail());
+
+                                        Glide.with(ContactDetailActivity.this)
+                                                .load(contactDetail.getImgUrl())
+                                                .circleCrop().into(avatar);
+
                                         return;
                                     }
                                 }
