@@ -4,30 +4,20 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.votruongdung_4842.data.ContactDetail;
-import com.example.votruongdung_4842.data.Contacts;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 public class ContactDetailActivity extends AppCompatActivity {
@@ -44,9 +34,9 @@ public class ContactDetailActivity extends AppCompatActivity {
         Intent t = getIntent();
         String contactId = t.getExtras().getString("contactId");
 
-         name = findViewById(R.id.textView);
-         phone = findViewById(R.id.textView3);
-         email = findViewById(R.id.textView5);
+        name = findViewById(R.id.textView);
+        phone = findViewById(R.id.textView3);
+        email = findViewById(R.id.textView5);
 
         returnBtn = findViewById(R.id.return_home_btn);
         callBtn = findViewById(R.id.call_btn);
@@ -55,75 +45,58 @@ public class ContactDetailActivity extends AppCompatActivity {
 
         avatar = findViewById(R.id.imageView4);
 
-        returnBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent t = new Intent(ContactDetailActivity.this, HomeActivity.class);
-                startActivity(t);
-            }
+        returnBtn.setOnClickListener(view -> {
+            Intent t1 = new Intent(ContactDetailActivity.this, HomeActivity.class);
+            startActivity(t1);
         });
 
-        callBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                callIntent.setData(Uri.parse("tel:" + contactDetail.getPhone()));
-                startActivity(callIntent);
-            }
+        callBtn.setOnClickListener(view -> {
+            Intent callIntent = new Intent(Intent.ACTION_DIAL);
+            callIntent.setData(Uri.parse("tel:" + contactDetail.getPhone()));
+            startActivity(callIntent);
         });
 
-
-        messageBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent messageIntent = new Intent(Intent.ACTION_VIEW);
-                messageIntent.setData(Uri.parse("sms:" + contactDetail.getPhone()));
-                startActivity(messageIntent);
-            }
+        messageBtn.setOnClickListener(view -> {
+            Intent messageIntent = new Intent(Intent.ACTION_VIEW);
+            messageIntent.setData(Uri.parse("sms:" + contactDetail.getPhone()));
+            startActivity(messageIntent);
         });
 
-        emailBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
-                emailIntent.setData(Uri.parse("mailto:" + contactDetail.getEmail()));
-                startActivity(emailIntent);
-            }
+        emailBtn.setOnClickListener(view -> {
+            Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+            emailIntent.setData(Uri.parse("mailto:" + contactDetail.getEmail()));
+            startActivity(emailIntent);
         });
 
         fb.db.collection("contacts")
                 .whereEqualTo("userId", fb.currentUser.getUid())
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                List<Map<String, Object>> list = (List<Map<String, Object>>) document.get("list");
-                                for (Map<String, Object> map : list) {
-                                    if (map.get("contactId").equals(contactId)) {
-                                        contactDetail.setName((String) map.get("name"));
-                                        contactDetail.setPhone((String) map.get("phone"));
-                                        contactDetail.setEmail((String) map.get("email"));
-                                        contactDetail.setImgUrl((String) map.get("photo"));
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            List<Map<String, Object>> list = (List<Map<String, Object>>) document.get("list");
+                            for (Map<String, Object> map : list) {
+                                if (Objects.equals(map.get("contactId"), contactId)) {
+                                    contactDetail.setName((String) map.get("name"));
+                                    contactDetail.setPhone((String) map.get("phone"));
+                                    contactDetail.setEmail((String) map.get("email"));
+                                    contactDetail.setImgUrl((String) map.get("photo"));
 
-                                        name.setText(contactDetail.getName());
-                                        phone.setText(contactDetail.getPhone());
-                                        email.setText(contactDetail.getEmail());
+                                    name.setText(contactDetail.getName());
+                                    phone.setText(contactDetail.getPhone());
+                                    email.setText(contactDetail.getEmail());
 
-                                        Glide.with(ContactDetailActivity.this)
-                                                .load(contactDetail.getImgUrl())
-                                                .circleCrop().into(avatar);
+                                    Glide.with(ContactDetailActivity.this)
+                                            .load(contactDetail.getImgUrl())
+                                            .circleCrop().into(avatar);
 
-                                        return;
-                                    }
+                                    return;
                                 }
                             }
-                        } else {
-                            Log.w("ContactDetailActivity", "Error getting documents.", task.getException());
                         }
+                    } else {
+                        Log.w("ContactDetailActivity", "Error getting documents.", task.getException());
                     }
                 });
-
     }
 }

@@ -2,7 +2,6 @@ package com.example.votruongdung_4842;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -10,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -26,15 +24,11 @@ import androidx.core.app.ActivityCompat;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -46,7 +40,6 @@ public class AddContactActivity extends AppCompatActivity {
     private static final int REQUEST_READ_EXTERNAL_STORAGE = 2;
 
     Firebase fb = new Firebase();
-    Validator validator = new Validator();
     TextView emailTv;
     ImageButton returnBtn, uploadAvt;
     Button saveBtn;
@@ -74,13 +67,12 @@ public class AddContactActivity extends AppCompatActivity {
         emailEdt = findViewById(R.id.editTextTextPersonName3);
 
         emailTv.setText(fb.currentUser.getEmail());
-        returnBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent t = new Intent(AddContactActivity.this, HomeActivity.class);
-                startActivity(t);
-            }
+
+        returnBtn.setOnClickListener(v -> {
+            Intent t = new Intent(AddContactActivity.this, HomeActivity.class);
+            startActivity(t);
         });
+
         String url = "https://img.icons8.com/?size=512&id=98957&format=png";
         String url2 = "https://icon-library.com/images/add-camera-icon/add-camera-icon-13.jpg";
         Glide.with(this)
@@ -91,50 +83,38 @@ public class AddContactActivity extends AppCompatActivity {
                 .circleCrop()
                 .into(uploadAvt);
 
-        uploadAvt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        uploadAvt.setOnClickListener(v -> {
                 requestReadExternalStoragePermission();
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, PICK_IMAGE);
-            }
         });
 
-        saveBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                    String name = nameEdt.getText().toString();
-                    String phone = phoneEdt.getText().toString();
-                    String email = emailEdt.getText().toString();
-                    // Trien khai ham validate
-                    if(validator.validator(selectedImage, name, phone, email)==""){
-                        Uri file = selectedImage;
-                        StorageReference storageRef = fb.storage.getReference();
-                        StorageReference imageRef = storageRef.child("photos/"+fb.currentUser.getUid()+"/"+ file.getLastPathSegment());
-                        UploadTask uploadTask = imageRef.putFile(file);
-                        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(Uri uri) {
-                                        String imageUrl = uri.toString();
-                                        String contactId = fb.db.collection("contacts").document().getId();
-                                        addContact(contactId, name, phone, email, imageUrl);
-                                    }
-                                });
-                            }
-                        });
-                    }
-                    else{
-                        Toast.makeText(AddContactActivity.this, validator.validator(
-                                selectedImage,
-                                name,
-                                phone,
-                                email), Toast.LENGTH_SHORT).show();
-                    }
+        saveBtn.setOnClickListener(v -> {
+            String name = nameEdt.getText().toString();
+            String phone = phoneEdt.getText().toString();
+            String email = emailEdt.getText().toString();
+
+            // Trien khai ham validate
+            Validator validator = new Validator();
+            if(validator.validator(selectedImage, name, phone, email).equals("")){
+                    Uri file = selectedImage;
+                    StorageReference storageRef = fb.storage.getReference();
+                    StorageReference imageRef = storageRef.child("photos/"+fb.currentUser.getUid()+"/"+ file.getLastPathSegment());
+                    UploadTask uploadTask = imageRef.putFile(file);
+                    uploadTask.addOnSuccessListener(taskSnapshot -> imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                        String imageUrl = uri.toString();
+                        String contactId = fb.db.collection("contacts").document().getId();
+                        addContact(contactId, name, phone, email, imageUrl);
+                    }));
                 }
-        });
+                else{
+                    Toast.makeText(AddContactActivity.this, validator.validator(
+                            selectedImage,
+                            name,
+                            phone,
+                            email), Toast.LENGTH_SHORT).show();
+                }
+            });
     }
 
     @Override
@@ -161,7 +141,7 @@ public class AddContactActivity extends AppCompatActivity {
                     .circleCrop()
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
-                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                        public void onResourceReady(@NonNull Bitmap resource, Transition<? super Bitmap> transition) {
                             uploadAvt.setImageBitmap(resource);
                         }
                     });
@@ -173,18 +153,8 @@ public class AddContactActivity extends AppCompatActivity {
             new AlertDialog.Builder(this)
                     .setTitle("Yêu cầu quyền truy cập")
                     .setMessage("This permission is needed to access photos from your device.")
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            ActivityCompat.requestPermissions(AddContactActivity.this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_READ_EXTERNAL_STORAGE);
-                        }
-                    })
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    })
+                    .setPositiveButton("OK", (dialog, which) -> ActivityCompat.requestPermissions(AddContactActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_READ_EXTERNAL_STORAGE))
+                    .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
                     .create().show();
         } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_READ_EXTERNAL_STORAGE);
@@ -201,20 +171,17 @@ public class AddContactActivity extends AppCompatActivity {
         fb.db.collection("contacts")
                 .whereEqualTo("userId", fb.currentUser.getUid())
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                DocumentReference docRef = document.getReference();
-                                docRef.update("list", FieldValue.arrayUnion(newContact));
-                                Intent t = new Intent(AddContactActivity.this, HomeActivity.class);
-                                startActivity(t);
-                                Toast.makeText(AddContactActivity.this, "Thêm thành công", Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            Log.d("error", "Error getting documents: ", task.getException());
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            DocumentReference docRef = document.getReference();
+                            docRef.update("list", FieldValue.arrayUnion(newContact));
+                            Intent t = new Intent(AddContactActivity.this, HomeActivity.class);
+                            startActivity(t);
+                            Toast.makeText(AddContactActivity.this, "Thêm thành công", Toast.LENGTH_SHORT).show();
                         }
+                    } else {
+                        Log.d("error", "Error getting documents: ", task.getException());
                     }
                 });
     }

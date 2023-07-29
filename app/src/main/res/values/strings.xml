@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">VoTruongDung_4842</string>
     <string name="logout">Đăng xuất</string>
-
+    <string name="input_phone">Nhập số điện thoại</string>
 </resources>

@@ -129,8 +129,8 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             android:ems="10"
-            android:hint="Nhập số điện thoại"
-            android:inputType="textPersonName"
+            android:hint="@string/input_phone"
+            android:inputType="number"
             android:paddingLeft="10dp"
             android:paddingRight="10dp" />
 

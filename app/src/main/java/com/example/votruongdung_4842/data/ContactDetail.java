@@ -1,10 +1,12 @@
 package com.example.votruongdung_4842.data;
 
-import java.util.Date;
-
 public class ContactDetail {
-    private String id,name,phone,email,imgUrl;
-    Date dateCreated;
+    private String name;
+    private String phone;
+    private String email;
+    private String imgUrl;
+
+    public ContactDetail(){}
 
     public String getName() {
         return name;
@@ -28,14 +30,6 @@ public class ContactDetail {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public Date getDateCreated() {
-        return dateCreated;
-    }
-
-    public void setDateCreated(Date dateCreated) {
-        this.dateCreated = dateCreated;
     }
 
     public String getImgUrl() {
