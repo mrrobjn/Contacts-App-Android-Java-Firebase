@@ -120,7 +120,7 @@ public class ContactDetailActivity extends AppCompatActivity {
                                 }
                             }
                         } else {
-                            Log.w("MainActivity2", "Error getting documents.", task.getException());
+                            Log.w("ContactDetailActivity", "Error getting documents.", task.getException());
                         }
                     }
                 });

@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Users {
-//    Firebase firebase = new Firebase();
 
     String userId, name, profile;
     public Users(String userId, String name, String profile) {
@@ -47,30 +46,7 @@ public class Users {
         this.profile = profile;
     }
 
-//    public void createUser(String userId, String name, String photoUrl){
-//        Map<String, Object> data = new HashMap<>();
-//        data.put("userId", userId);
-//        data.put("name", name);
-//        data.put("photoUrl", photoUrl);
-//        firebase.db.collection("users")
-//                .whereEqualTo("userId", userId)
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            if (task.getResult().isEmpty()) {
-//                                // Add new document
-//                                firebase.db.collection("users").add(data);
-//                            } else {
-//                                // Document with userId already exists
-//                            }
-//                        } else {
-//                            // Handle error
-//                        }
-//                    }
-//                });
-//    }
+
 }
 
 

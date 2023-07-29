@@ -107,7 +107,7 @@ public class AddContactActivity extends AppCompatActivity {
                 if (selectedImage != null) {
                     Uri file = selectedImage;
                 StorageReference storageRef = fb.storage.getReference();
-                StorageReference imageRef = storageRef.child("photos/"+ file.getLastPathSegment());
+                StorageReference imageRef = storageRef.child("photos/"+fb.currentUser.getUid()+"/"+ file.getLastPathSegment());
                 UploadTask uploadTask = imageRef.putFile(file);
 
                 uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {

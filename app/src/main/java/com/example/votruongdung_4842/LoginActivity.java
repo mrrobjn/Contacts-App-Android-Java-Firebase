@@ -24,6 +24,12 @@ import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderF
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
     Button btnSignIn;
@@ -64,6 +70,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 signIn();
+                createUser(firebase.currentUser.getUid());
             }
         });
     }
@@ -74,7 +81,30 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = googleSignInClient.getSignInIntent();
         startActivityForResult(intent,RC_SIGN_IN);
     }
+    private void createUser(String userId){
+        Map<String, Object> data = new HashMap<>();
+        List<Object> list = new ArrayList<>();
 
+        data.put("userId", userId);
+        data.put("list", list);
+
+        firebase.db.collection("contacts")
+                .whereEqualTo("userId", userId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            if (task.getResult().isEmpty()) {
+                                // Add new document
+                                firebase.db.collection("contacts").add(data);
+                            }
+                        } else {
+                            // Handle error
+                        }
+                    }
+                });
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -96,18 +126,6 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-//                            FirebaseUser user = firebase.auth.getCurrentUser();
-//                            Users users = new Users();
-//                            users.setUserId(user.getUid());
-//                            users.setName(user.getDisplayName());
-//                            users.setProfile(user.getPhotoUrl().toString());
-//
-//                            String userId = users.getUserId();
-//                            String name = users.getName();
-//                            String photoUrl = users.getProfile();
-//
-//                            users.createUser(userId,name,photoUrl);
-
                             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                             startActivity(intent);
                         }
