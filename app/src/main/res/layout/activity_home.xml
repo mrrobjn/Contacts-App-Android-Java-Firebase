@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="#f2f2f2"
     android:orientation="vertical"
     android:paddingLeft="20dp"
+    android:paddingTop="10dp"
     android:paddingRight="20dp"
     tools:context=".HomeActivity">
 
@@ -14,7 +15,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="61dp"
-        android:background="#ffffff"
         android:orientation="horizontal">
 
         <TextView
@@ -28,18 +28,15 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="right|center_vertical"
-            app:cardCornerRadius="25dp">
-
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:srcCompat="@tools:sample/avatars" />
-        </androidx.cardview.widget.CardView>
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="0"
+            android:backgroundTint="#fff"
+            android:contentDescription="photo btn"
+            tools:srcCompat="@tools:sample/avatars" />
 
     </LinearLayout>
 
@@ -62,8 +59,9 @@
         android:layout_width="match_parent"
         android:layout_height="620dp"
         android:layout_weight="1"
-        android:divider="@null"
-        android:dividerHeight="0dp" />
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp"
+        />
 
     <Button
         android:id="@+id/add_contact_btn"

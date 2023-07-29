@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -57,20 +58,26 @@ public class LoginActivity extends AppCompatActivity {
                 .requestEmail()
                 .build();
         googleSignInClient = GoogleSignIn.getClient(this, gso);
-        googleSignInClient.signOut()
-                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        // Sign in again
-                    }
-                });
 
+        // kiem tra neu con dang nhap ko
+        if(firebase.auth.getCurrentUser()!=null){
+            Intent t = new Intent(LoginActivity.this, HomeActivity.class);
+            startActivity(t);
+        }
+        googleSignInClient.signOut().addOnCompleteListener(this, new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+
+            }
+        });
 
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 signIn();
-                createUser(firebase.currentUser.getUid());
+                if (firebase.auth.getCurrentUser() != null) {
+                    createUser(firebase.currentUser.getUid());
+                }
             }
         });
     }

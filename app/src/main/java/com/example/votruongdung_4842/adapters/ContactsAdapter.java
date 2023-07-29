@@ -83,9 +83,11 @@ public class ContactsAdapter extends BaseExpandableListAdapter {
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.items, parent, false);
         }
+
         TextView nameTextView = convertView.findViewById(R.id.contact_name);
         TextView phoneTextView = convertView.findViewById(R.id.contact_phone);
         ImageView photo = convertView.findViewById(R.id.imageView2);
+
 
 
         Contacts contacts = (Contacts) getChild(groupPosition, childPosition);
@@ -119,6 +121,7 @@ public class ContactsAdapter extends BaseExpandableListAdapter {
         }
         return input;
     }
+
 }
 
 
