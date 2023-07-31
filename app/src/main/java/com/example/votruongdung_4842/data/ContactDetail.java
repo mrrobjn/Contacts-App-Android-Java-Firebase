@@ -1,10 +1,19 @@
 package com.example.votruongdung_4842.data;
 
+import java.util.Map;
+
 public class ContactDetail {
     private String name;
     private String phone;
     private String email;
     private String imgUrl;
+
+    public ContactDetail(Map<String, Object> map) {
+        this.setName((String) map.get("name"));
+        this.setPhone((String) map.get("phone"));
+        this.setEmail((String) map.get("email"));
+        this.setImgUrl((String) map.get("photo"));
+    }
 
     public ContactDetail(){}
 

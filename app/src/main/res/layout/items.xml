@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="85dp"
+    android:layout_height="75dp"
     app:cardBackgroundColor="#f2f2f2">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="@drawable/round_item"
         android:orientation="horizontal"
@@ -32,8 +32,10 @@
             <TextView
                 android:id="@+id/contact_name"
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
+                android:layout_height="wrap_content"
                 android:gravity="bottom"
+                android:minHeight="35dp"
+                android:overScrollMode="never"
                 android:text="Contact Name"
                 android:textColor="#000000"
                 android:textSize="16sp"
@@ -42,9 +44,11 @@
             <TextView
                 android:id="@+id/contact_phone"
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:gravity="center_vertical"
-                android:text="Contact Phone"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:minHeight="35dp"
+                android:overScrollMode="never"
+                android:text="Contact phone"
                 android:textColor="#cccccc"
                 android:textSize="16sp" />
         </LinearLayout>

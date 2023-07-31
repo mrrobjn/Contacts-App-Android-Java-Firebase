@@ -51,9 +51,10 @@
 
         <TextView
             android:id="@+id/textView"
-            android:layout_width="wrap_content"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:gravity="center"
             android:text="contact name"
             android:textColor="#000"
             android:textSize="20sp"
@@ -86,7 +87,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
                     android:gravity="bottom"
-                    android:text="Home"
+                    android:text="Nhà riêng"
                     android:textSize="14sp" />
 
                 <TextView
@@ -95,7 +96,7 @@
                     android:layout_height="30dp"
                     android:text="phone number"
                     android:textColor="#000"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -148,7 +149,7 @@
                     android:layout_height="30dp"
                     android:text="email"
                     android:textColor="#000"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
